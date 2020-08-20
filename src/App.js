@@ -1,26 +1,35 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import {BrowserRouter as Router, Route} from 'react-router-dom';
+import './style/App.css';
+import MainNav from "./global/nav/MainNav";
+import Home from "./home/Home";
+import TasksListContainer from "./tasks/TasksListContainer";
+import TaskProvider from "./provider/TaskProvider";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+/*
+TODO: Could be handled from some higher up datastore service, persistence model or cache, for now load empty
+ */
+const taskState = {
+    tasks: []
+};
+
+function App()
+{
+    return (
+        <TaskProvider initialState={taskState}>
+            <Router>
+                <MainNav/>
+                <Route exact path="/" component={Home} />
+
+                <Route path="/tasks">
+                    <TasksListContainer/>
+                </Route>
+                <Route path="/tasks/*">
+                  <TasksListContainer/>
+                </Route>
+            </Router>
+        </TaskProvider>
+    );
 }
 
 export default App;
